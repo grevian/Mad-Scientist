@@ -1,0 +1,25 @@
+Class ID's:
+
+IntroState = 0
+IdleState = 1
+MenuState = 3
+QuitState = 4
+OptionsState = 5
+MainGameState = 6
+MapState = 7
+
+
+Map Parchment background from:
+http://www.photoshopstar.com/effects/adding-the-picture-to-the-old-parchment/
+
+wood background from 
+http://mayang.com/textures/Wood/html/Manufactured%20Wooden%20Items/index.html
+
+castle from 
+http://topgfx.com/2009/10/13/the-gothic-castle.html
+
+village from
+http://etc.usf.edu/clipart/45000/45056/45056_med_village.htm
+
+graveyard from
+http://thecoloringspot.com/halloween/halloween-coloring-pages-2.html

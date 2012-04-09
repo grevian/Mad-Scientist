@@ -1,0 +1,30 @@
+# backgrounds
+folder=default
+main-background=main.png
+option-background=options-bg.png
+
+# buttons
+start=start.png
+start-pos=AUTO
+options=options.png
+options-pos=AUTO
+quit=quit.png
+quit-pos=AUTO
+
+# In game UI
+main-map=map.png
+plus=plus.png
+minus=minus.png
+
+# The first three are required elements, others can be added just to add visual elements to the map
+map-elements=castle,village,graveyard
+
+# image,xpos,ypos
+castle=castle.png,150,200
+village=village.png,450,300
+graveyard=graveyard.png,350,100
+
+# Castle screen gui elements
+CastleGuiBackground=gui-background.png
+MapButton=map-thumbnail.png
+ResourceButton=resource-thumbnail.png
