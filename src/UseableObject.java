@@ -28,6 +28,23 @@ public abstract class UseableObject {
 	protected GameCore getCore() {
 		return mCore;
 	}
+	
+	public String toString() {
+		String userList = "";
+		for ( Minion m: users )
+		{
+			userList += m.getName();
+			userList += ", ";
+		}
+		if ( userList.length() > 2 )
+			userList.substring(0, userList.length()-2);
+		return getName() + " - Users: " + userList;
+	}
+	
+	public void initGraphics() throws SlickException
+	{
+		icon = new Image(this.getConfig().getProperty("icon"));
+	}
 
 	public UseableObject(String configFile, GameCore mCore) throws SlickException
 	{
@@ -37,8 +54,6 @@ public abstract class UseableObject {
 		timeToUse = Integer.parseInt(config.getProperty("time-to-use", "200"));
 		range = Integer.parseInt(config.getProperty("range", "1"));
 		users = new ArrayList<Minion>(maxUsers);
-		icon = new Image(this.getConfig().getProperty("icon"));
-		Log.info("Created object " + this.getName());
 	}
 	
 	public boolean addUser(Minion mUnit) 
@@ -46,7 +61,13 @@ public abstract class UseableObject {
 		users.add(mUnit);
 		return true;
 	}
-	public abstract boolean doEffect(Minion mUnit);
+	
+	public boolean doEffect(Minion mUnit)
+	{
+		return doEffect(mUnit, "");
+	}
+	
+	public abstract boolean doEffect(Minion minion, String string);
 	
 	protected Properties getConfig() {
 		return config;
@@ -83,15 +104,7 @@ public abstract class UseableObject {
 	}
 
 	public boolean removeUser(Minion mUnit) {
-		for ( int i = 0; i < users.size(); i++ )
-		{
-			if ( mUnit.getName() == users.get(i).getName() )
-			{
-				users.remove(i);
-				return true; // User found and removed
-			}
-		}
-		return false; // User not found
+		return users.remove(mUnit);
 	}
 
 	public void setLocation(Coord location) {
@@ -111,6 +124,7 @@ public abstract class UseableObject {
 		// Optionally, instead of relying on "doEffect", they could make changes to minions here, if their effect
 		// is incremental
 	}
-
+	
+	public abstract void upgrade();
 	
 }

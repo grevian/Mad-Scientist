@@ -1,3 +1,4 @@
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -5,7 +6,11 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.gui.MouseOverArea;
+import org.newdawn.slick.particles.ConfigurableEmitter;
+import org.newdawn.slick.particles.ParticleIO;
+import org.newdawn.slick.particles.ParticleSystem;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.Log;
@@ -18,13 +23,18 @@ public class MenuState extends BasicGameState {
 	// TODO: Move these into the config file
 	private static String themeDir = "./res/themes/";
 	private static int padding = 10;
+	private ParticleSystem ps;
 	
 	// These have to be matching pairs
-	final String[] Buttons = { "start", "options", "quit" };
-	final Integer[] mStates = { CastleScreen.ID, OptionsState.ID, QuitState.ID };
+	final String[] Buttons = { "start", "quit" };
+	final Integer[] mStates = { CastleScreen.ID, QuitState.ID };
+	
+	private Sound Laugh;
 	
 	private ArrayList<MenuChoice> mList;
 	Image BackgroundImage;
+
+	private ConfigurableEmitter emitter1;
 	
 	@Override
 	public void enter(GameContainer arg0, StateBasedGame arg1)
@@ -45,6 +55,23 @@ public class MenuState extends BasicGameState {
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
+		
+		Laugh = new Sound("./res/Sounds/Evil-Laugh.wav");
+		ps = new ParticleSystem(new Image("./res/Dot.png"), 500);
+		
+		try {
+			File xmlFile = new File("./res/smoke.xml");
+			emitter1 = ParticleIO.loadEmitter(xmlFile);
+			emitter1.setPosition(360,240);
+		} catch (Exception e) {
+			System.out.println("Exception: " +e.getMessage());
+			e.printStackTrace();
+			Log.error("No fancy particles for you...");
+		}
+		
+		ps.addEmitter(emitter1);	
+		ps.setBlendingMode(ParticleSystem.BLEND_ADDITIVE);	
+		ps.setUsePoints(false);
 		
 		if ( Buttons.length != mStates.length )
 			throw new SlickException("Sanity check error, The number of states does not match the number of buttons");
@@ -95,7 +122,11 @@ public class MenuState extends BasicGameState {
                         int x, int y, int clickCount)
 				{
 					if ( x >= this.getX() && x < this.getX()+this.getWidth() && y >= this.getY() && y <= this.getY() + this.getHeight())
+					{
+						if ( Buttons[fi].compareToIgnoreCase("start") == 0 )
+							Laugh.play();
 						game.enterState(mStates[fi]);
+					}
 				}
 			};
 			mList.add(new MenuChoice(mButton, mStates[i]));
@@ -127,11 +158,13 @@ public class MenuState extends BasicGameState {
 		for ( int i = 0; i < mList.size(); i++ )
 			mList.get(i).getDisplayImage().render(arg0, arg2);
 		
+		ps.render();
 	}
 
 	@Override
 	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
 			throws SlickException {
+		ps.update(arg2);
 	}
 
 }

@@ -13,9 +13,19 @@ import org.newdawn.slick.util.Log;
 public class IntroState extends BasicGameState {
 
 	public static int ID = 0;
-	private Image intro;
 	private long startTime;
 	private boolean skip = false;
+	String[] intro = {
+			"They doubted you...",
+			"They mocked you...",
+			"They called you insane...",
+			"But today, you will prove them all wrong!  Your servants stand at the ready,",
+			"send them out into the town to raid the village and the graveyard, put them",
+			"to work around your lab, and raise an army of re-animated soldiers, with the",
+			"biggest and baddest of them all as your champion!"	
+	};
+	private int perkTimer = 0;
+	private int displayLines = 0;
 	
 	@Override
 	public void enter(GameContainer arg0, StateBasedGame arg1)
@@ -31,15 +41,12 @@ public class IntroState extends BasicGameState {
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
-		intro = new Image("res/intro.PNG");
 		startTime = 0;
 	}
 
 	@Override
 	public void leave(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
-		
-		intro.destroy(); // Make sure it's cleaned up, probably not needed
 	}
 
 	@Override
@@ -49,17 +56,28 @@ public class IntroState extends BasicGameState {
 		arg2.setBackground(Color.black);
 		
 		// Draw the image centered on the screen
-		arg2.drawImage(intro, (arg0.getWidth()/2)-(intro.getWidth()/2),
-				(arg0.getHeight()/2)-(intro.getHeight()/2));	
+		int yOffset = 300;
+		for (int i = 0; i < displayLines; i++ )
+		{
+			arg2.drawString(intro[i], 50, yOffset);
+			yOffset += arg2.getFont().getLineHeight()+3;
+		}
 	}
 
 	@Override
 	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
 			throws SlickException {
+	
+		perkTimer += arg2;
+		if ( perkTimer >= 1600 )
+		{
+			displayLines  = Math.min(intro.length, displayLines + 1);
+			perkTimer = 0;
+		}
 		
 		startTime += arg2;
 		
-		if ( startTime > 6000 ) // After six seconds, we automatically move forward
+		if ( startTime > 18000 ) // After six seconds, we automatically move forward
 			skip = true;
 		
 		if (skip)

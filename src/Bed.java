@@ -23,14 +23,17 @@ public class Bed extends UseableObject {
 		super.removeUser(mUnit);
 		Log.info("Minion " + mUnit.getName() + " stopped using " + getName());
 		mUnit.setOnScreen(true);
-		mUnit.setStatus("Doing Nothing");
 		return true;
 	}
 	
 	@Override
-	public boolean doEffect(Minion mUnit) {
-		mUnit.setHealth(mUnit.getMaxHealth());
-		return true;
+	public boolean doEffect(Minion mUnit, String effect) {
+		if ( effect.equalsIgnoreCase("sleep") )
+		{
+			mUnit.setHealth(mUnit.getMaxHealth());
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -38,4 +41,9 @@ public class Bed extends UseableObject {
 		return "Bed";
 	}
 
+	public void upgrade()
+	{
+		// Reduce time to use
+	}
+	
 }

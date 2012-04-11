@@ -1,5 +1,3 @@
-import java.util.Properties;
-
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
@@ -22,6 +20,13 @@ public class SlickGame extends StateBasedGame {
 		addState(new MapState());
 		addState(new QuitState());
 		addState(new OptionsState());
+		addState(new ObjectiveState());
+		addState(new ResourceState());
+		addState(new BuyState());
+		addState(new DebugState());
+		addState(new EndgameCinematic());
+		addState(new GameLost());
+		mCore.initGraphics();
 	}
 
 	public GameCore getGameCore() {

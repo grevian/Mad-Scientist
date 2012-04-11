@@ -1,15 +1,13 @@
 # backgrounds
 folder=default
-main-background=main.png
+main-background=main2.png
 option-background=options-bg.png
 
 # buttons
 start=start.png
-start-pos=AUTO
-options=options.png
-options-pos=AUTO
+start-pos=500,400
 quit=quit.png
-quit-pos=AUTO
+quit-pos=500,475
 
 # In game UI
 main-map=map.png
@@ -26,5 +24,13 @@ graveyard=graveyard.png,350,100
 
 # Castle screen gui elements
 CastleGuiBackground=gui-background.png
-MapButton=map-thumbnail.png
-ResourceButton=resource-thumbnail.png
+MapButton=map2.png
+ResourceButton=gold.png
+ObjectiveButton=chemicals.png
+StoreButton=acme.png
+
+# buy screen gui elements
+upgrade-button=upgrade-button.png
+hire-button=hire-button.png
+build-button=build-button.png
+detail-button=detail-button.png

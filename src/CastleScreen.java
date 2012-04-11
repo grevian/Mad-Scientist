@@ -1,6 +1,7 @@
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -21,9 +22,9 @@ public class CastleScreen extends BasicGameState {
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
-		mCore = ((SlickGame)arg1).getGameCore();
+
 		mainLevel = new Image("res/VisMap.png");
-		mCore.setLevelPath(new PathMask("res/MapMask.png", 10, mCore));
+		mCore = ((SlickGame)arg1).getGameCore();
 		mGui = new CastleGUI(mCore, this);
 	}
 	
@@ -31,11 +32,6 @@ public class CastleScreen extends BasicGameState {
 	public void enter(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
 		Log.debug("Main Game State Entered");
-		
-		mCore.addObject(new Bed(mCore), new Coord(30, 7));
-		mCore.addObject(new Bed(mCore), new Coord(35, 7));
-		mCore.addObject(new Bed(mCore), new Coord(40, 7));
-		mCore.addObject(new PortalToTown(mCore), new Coord(60, 7));
 		
 		mGui.enable();
 	}
@@ -84,19 +80,26 @@ public class CastleScreen extends BasicGameState {
 		if ( y > 600 )
 			return;
 		
-		try {
-			Log.info("Placing Hunchbacks around point ["+x+"|"+y+"]");
-			
-			Hunchback tHunch = new Hunchback(mCore.getLevel());
-			mCore.addMinion(tHunch);
-			tHunch.setPosition(x/10, y/10);
-			tHunch.doExampleTask();
-			
-			
-		} catch (SlickException e) {
-			e.printStackTrace();
-			Log.error("Something fucked up!");
-		}
+		// TODO: Display information for whatever was clicked on here
 	}
 	
+	public void keyPressed(int key, char arg1) {
+		if ( key == Input.KEY_D )
+		{
+			if ( Boolean.parseBoolean(mCore.getConfiguration().getProperty("debug")) )
+				mCore.getGame().enterState(DebugState.ID);
+		}
+		if ( key == Input.KEY_A )
+		{
+			if ( Boolean.parseBoolean(mCore.getConfiguration().getProperty("debug")) )
+				for ( Place p: mCore.getPlaces() )
+				{
+					if ( p.getName().equalsIgnoreCase("town") )
+					{
+						((Town)p).spawnMob();
+						break;
+					}
+				}
+		}
+	}
 }

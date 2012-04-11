@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Properties;
 
@@ -15,6 +16,8 @@ import org.newdawn.slick.util.pathfinding.Path;
 import org.newdawn.slick.util.pathfinding.Path.Step;
 
 public abstract class Entity implements Mover {
+
+	private static int counter = 1;
 
 	public abstract boolean isFriendly();
 	public abstract String getName();
@@ -38,17 +41,34 @@ public abstract class Entity implements Mover {
 	
 	private ArrayList<MinionTask> mTasks = new ArrayList<MinionTask>();
 	private boolean visible = true;
+	private String StatusMessage;
 	
-	protected Entity(PathMask mLevel, Properties mProps) throws SlickException
+	private Properties mProps;
+	private HashMap<String, Integer> valueStore = new HashMap<String, Integer>();
+	protected int iCounter = getCounter();
+	
+	private GameCore mCore;
+	
+	protected GameCore getCore()
+	{
+		return mCore;
+	}
+	
+	protected Entity(GameCore mCore, Properties mProps) throws SlickException
 	{
 		// Basic initializations
+		this.mCore = mCore;
 		mPaths = new LinkedList<Path>();
+		this.mProps = mProps;		
 		
 		// Set up the basic entity components
-		this.setLevel(mLevel); // Needed for pathfinding
+		this.setLevel(mCore.getLevel()); // Needed for pathfinding
 		this.setTypeName(mProps.getProperty("TypeName")); // Used for display purposes mostly
 		this.setSpeed(Integer.parseInt(mProps.getProperty("speed"))); // Used for movement animation
-		
+	}
+	
+	public void initGraphics() throws SlickException
+	{
 		// Load up the graphics and animations for this Entity
 		mGraphics = new CharacterGraphics();
 		String animList[] = mProps.getProperty("Animations").split(",");
@@ -78,13 +98,10 @@ public abstract class Entity implements Mover {
 			sy = mPaths.getLast().getStep(mPaths.getLast().getLength()-1).getY();	
 		}
 		
-		Log.debug("Path starts at ["+sx+"]["+sy+"] and ends at ["+gx+"]["+gy+"]");
-		
 		Path tPath = mPathfinder.findPath(this, sx, sy, gx, gy);
 		if ( tPath == null )
 			throw new SlickException("Path not Possible");
 		mPaths.push(tPath);
-		Log.debug("New Path Added to Entity of class: " + this.getClass() );
 	}
 	
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2) throws SlickException
@@ -93,9 +110,10 @@ public abstract class Entity implements Mover {
 			mGraphics.render(arg0, arg1, arg2);
 	}
 	
-	protected void addTask(MinionTask mTask)
+	protected boolean addTask(MinionTask mTask)
 	{
 		mTasks.add(mTask);
+		return true;
 	}
 	
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException
@@ -113,14 +131,12 @@ public abstract class Entity implements Mover {
 		
 		if ( currentPath != null && pathStep >= currentPath.getLength() )
 		{
-			Log.debug("End of path reached, discarding");
 			pathStep = 0;
 			currentPath = null; // We reached the end of the current path, discard it.
 		}
 		
 		if (currentPath == null && mPaths.size() > 0 )
 		{
-			Log.debug("Following new path, Paths Remaining: " + mPaths.size());
 			pathStep = 0;
 			currentPath = mPaths.removeLast();
 		}
@@ -162,12 +178,16 @@ public abstract class Entity implements Mover {
 
 	private void updateTasks(GameContainer container, StateBasedGame game,	int delta) throws SlickException
 	{
+		if ( mTasks.size() == 0 )
+			setStatus("IDLE");
+		
 		while (mTasks.size() > 0) 
 		{
 			MinionTask cTask = mTasks.get(0);
 			if ( !cTask.isStarted() )
 			{
 				cTask.start();
+				this.setStatus(cTask.getStatus());
 				Log.debug(this.getName() + " started task: " + cTask.getDescription());
 			}
 			
@@ -175,6 +195,8 @@ public abstract class Entity implements Mover {
 			{
 				mTasks.remove(cTask);
 				Log.debug(this.getName() + " completed task: " + cTask.getDescription());
+				if ( mTasks.size() == 0 )
+					this.setStatus("IDLE");
 			}
 			else
 			{
@@ -249,12 +271,38 @@ public abstract class Entity implements Mover {
 		visible  = value;
 	}
 
+	public void setStatus(String string) {
+		StatusMessage = string;
+	}
+	public String getStatus() {
+		return StatusMessage;
+	}
+	public void setValue(String key, int value) {
+		valueStore.put(key, value);
+	}
+	private static int getCounter() {
+		return counter++;
+	}
+	public int getValue(String key) {
+		return valueStore.get(key);
+	}
 	// courtesy of http://slick.javaunlimited.net/viewtopic.php?t=2199
 	public static float lerp(int a, int b, float t) 
 	{
 		if (t < 0)
 			return a;
 		return a + t * (b - a);
+	}
+	public void addPath(Coord position) throws SlickException {
+		addPath(position.getX(), position.getY());		
+	}
+	
+	public void interrupt() {
+		for ( MinionTask m: mTasks )
+			m.interrupt(false);
+		this.currentPath = null;
+		this.mPaths.clear();
+		this.pathStep = 0;
 	}
 
 }

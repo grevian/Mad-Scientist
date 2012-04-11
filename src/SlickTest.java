@@ -14,6 +14,7 @@ public class SlickTest {
 		    						 Integer.parseInt(mSlickGame.getGameCore().getConfiguration().getProperty("height")),
 		    						 false);
 			
+			container.setShowFPS(false);
 			container.setVSync(true);
 		    
 			// Start things rolling

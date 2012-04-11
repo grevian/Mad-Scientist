@@ -3,29 +3,16 @@ import org.newdawn.slick.util.Log;
 
 public class Hunchback extends Minion {
 
-	private int heldResources = 0;
 	private int townDelta = 0;
 	private int townUpdateTime = 10000;
 	
-	public void addResources(int value)
+	public Hunchback(GameCore mCore) throws SlickException
 	{
-		heldResources += value;
+		super(mCore, ConfigReader.readConfig("./res/hunchback.cfg"));
+		setValue("Money", 0);
+		setValue("Parts", 0);
 	}
 	
-	public Hunchback(PathMask level) throws SlickException
-	{
-		super(level, ConfigReader.readConfig("./res/hunchback.cfg"));
-	}
-	
-	public void doExampleTask()
-	{
-		this.addTask(TaskLibrary.getWalkTo(this, this.getLevel().RandomLocation()));
-		this.addTask(TaskLibrary.getWalkTo(this, this.getLevel().RandomLocation()));
-		this.addTask(TaskLibrary.getRecoverTask(this));
-		this.addTask(TaskLibrary.getWalkTo(this, this.getLevel().RandomLocation()));
-		this.addTask(TaskLibrary.getWalkTo(this, this.getLevel().RandomLocation()));		
-	}
-
 	public void placeUpdate(Place mPlace, int delta)
 	{
 		if ( mPlace.getName().compareToIgnoreCase("town") == 0 )
@@ -37,14 +24,6 @@ public class Hunchback extends Minion {
 				Log.debug("Minion " + getName() + " perked in " + mPlace.getName() );
 			}
 		}
-	}
-	
-	protected void removeResources(int i) {
-		heldResources -= i;
-	}
-
-	protected int getResources() {
-		return heldResources;
 	}
 	
 }

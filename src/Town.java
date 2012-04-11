@@ -1,4 +1,5 @@
 import java.util.Properties;
+import java.util.Random;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -20,6 +21,7 @@ public class Town extends Place {
 	private int FearStepTime_c = 0;
 	private int GatherStepTime_c = 0;
 	private int GatherStepTime = 10000;
+	private Random mRand = new Random();
 	
 	private static final int UI_OFFSET = 200;
 	
@@ -34,13 +36,22 @@ public class Town extends Place {
 	public Town(GameCore mCore) throws SlickException
 	{
 		super("Town", mCore);
-		Properties mConfig = mCore.getConfiguration();
+		getCore().setValue("Money", 0);
+		
+		Properties mConfig = getCore().getConfiguration();
 		Properties mTheme = ConfigReader.readConfig(themeDir + mConfig.getProperty("theme"));
 		String[] townAttributes = mTheme.getProperty("village").split(",");
 		x = Integer.parseInt(townAttributes[X]);
 		y = Integer.parseInt(townAttributes[Y]);
+		
+	}
+	
+	public void initGraphics() throws SlickException
+	{
+		Properties mConfig = getCore().getConfiguration();
+		Properties mTheme = ConfigReader.readConfig(themeDir + mConfig.getProperty("theme"));
+		String[] townAttributes = mTheme.getProperty("village").split(",");
 		mapImage = new Image(themeDir + mTheme.getProperty("folder") + "/" + townAttributes[IMAGE]);
-		getCore().setValue("Money", 0);
 	}
 	
 	public void update(GameContainer container, StateBasedGame game, int delta)
@@ -67,9 +78,21 @@ public class Town extends Place {
 		if ( GatherStepTime_c >= GatherStepTime )
 		{
 			GatherStepTime_c = 0;
-			getCore().setValue("Money", getCore().getValue("Money") + (MONEY_PER_UNIT * getUsers().size()) );
 			if ( getUsers().size() > 0 )
-				Log.debug("Recieved Money from robbing and extorting the townspeople, Current Money Available: " + getCore().getValue("Money"));
+			{
+				if (mRand.nextInt(100) > 90)
+				{
+					OverlayGUI.LogMessage("Your minions were caught stealing! An angry mob has arrived at your doorstep!");
+					spawnMob();
+				}
+				else
+				{
+					getCore().setValue("Money", getCore().getValue("Money") + (MONEY_PER_UNIT * getUsers().size()) );
+					Log.debug("Recieved Money from robbing the townspeople, Current Money Available: " + getCore().getValue("Money"));
+					OverlayGUI.LogMessage("Recieved Money from robbing the townspeople, Current Amount Available: " + getCore().getValue("Money"));
+				}
+				
+			}
 		}
 		
 	}
@@ -110,6 +133,23 @@ public class Town extends Place {
 		return mapImage;
 	}
 
+	public void spawnMob()
+	{
+		try {
+			int MobSize = Math.max(2, mRand.nextInt(6));
+			Portal mPortal = (Portal) getCore().getLevel().findObjectType("Portal to Town");
+			for ( int i = 0; i < MobSize; i++ )
+			{
+				Villager v;
+				v = new Villager(getCore());
+				v.initGraphics();
+				getCore().addEnemy(v, mPortal.getLocation());
+			}
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	public Coord getPosition() {
 		return new Coord(x, y);

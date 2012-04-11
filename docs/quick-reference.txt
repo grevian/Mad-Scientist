@@ -7,6 +7,11 @@ QuitState = 4
 OptionsState = 5
 MainGameState = 6
 MapState = 7
+ObjectiveState = 8
+ResourceState = 9
+BuyState = 10
+debugState = 11
+EndgameCinematic = 12
 
 
 Map Parchment background from:

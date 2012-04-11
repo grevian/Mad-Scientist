@@ -1,0 +1,4 @@
+investigate task heirarchies to allow subtasks to be better handled in groups,
+ - better indicators in statuses,
+ - better finding/interrupting of tasks based on groups
+ - requirements, ie. "group X is done", "task Y is done" to allow restarting interrupted tasks  

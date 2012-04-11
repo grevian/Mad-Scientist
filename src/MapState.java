@@ -43,8 +43,21 @@ public class MapState extends BasicGameState {
 		plus = new Image(themeDir + mTheme.getProperty("folder") + "/" + mTheme.getProperty("plus"));
 		minus = new Image(themeDir + mTheme.getProperty("folder") + "/" + mTheme.getProperty("minus"));
 		
-		mapElementList.add(new MapElement(new Town(mCore), this));
-		mapElementList.add(new MapElement(new Graveyard(mCore), this));
+		for ( int i = 0; i < mCore.getPlaces().size(); i++ )
+		{
+			Place mTemp = mCore.getPlaces().get(i);
+			
+			for ( String unit : mConfig.getProperty("units").split(",") )
+			{
+				mCore.setValue("pending-call-from-"+mTemp.getName()+"-for-" + unit, 0);
+				mCore.setValue("pending-send-to-"+mTemp.getName()+"-for-" + unit, 0);	
+			}
+			
+			if ( mTemp.getName() == "Town" )
+				mapElementList.add(new MapElement((Town)mTemp, this));
+			else if ( mTemp.getName() == "Graveyard" )
+				mapElementList.add(new MapElement((Graveyard)mTemp, this));
+		}
 		
 		this.setSelected(mapElementList.get(0).getPlace());
 		
@@ -96,13 +109,13 @@ public class MapState extends BasicGameState {
 			mUnitControllers.get(i).render(arg0, arg1, arg2);
 		}
 		
+		OverlayGUI.renderConsole(arg2);
 	}
 
 	@Override
 	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
 			throws SlickException {
-		// TODO Auto-generated method stub
-
+		OverlayGUI.update(arg2);
 	}
 	
 	@Override
@@ -209,12 +222,14 @@ public class MapState extends BasicGameState {
 		private String unitName;
 		private int x, y;
 		private GameCore mCore;
+		private MapState mMap;
 	
 		private final static int padding = 2;
 		
 		public UnitController(final GameCore mCore, final String unitName, int xpos, int ypos, final MapState mMap ) throws SlickException
 		{
 			Log.info("Constructing Map Control for unit " + unitName);
+			this.mMap = mMap;
 			this.x = xpos;
 			this.y = ypos;
 			this.unitName = unitName;
@@ -241,6 +256,8 @@ public class MapState extends BasicGameState {
 							&& y <= this.getY() + this.getHeight()) 
 					{
 						mCore.sendMinion(unitName, mMap.getSelected().getPlace());
+						String sendName = "pending-send-to-"+mMap.getSelected().getPlace().getName()+"-for-" + unitName;
+						mCore.setValue(sendName, mCore.getValue(sendName)+1);
 					}
 				}
 			});
@@ -255,7 +272,6 @@ public class MapState extends BasicGameState {
 							&& y >= this.getY()
 							&& y <= this.getY() + this.getHeight()) 
 					{
-						// TODO: Impliment "callUnit" in the game class
 						mCore.callMinion(unitName, mMap.getSelected().getPlace());
 					}
 				}
@@ -275,6 +291,7 @@ public class MapState extends BasicGameState {
 		public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 		throws SlickException {
 			int unitCount = 0;
+			int unitPresentCount = 0;
 			
 			for (Entity m: 	mCore.getMinions() )
 			{
@@ -282,9 +299,21 @@ public class MapState extends BasicGameState {
 					unitCount++;
 			}
 			
+			for ( Entity m: mMap.getSelected().getPlace().getUsers() )
+			{
+				if ( m.getTypeName().toLowerCase().startsWith(unitName) )
+					unitPresentCount++;
+			}
+			
+			
 			arg2.drawImage(unitImage, x, y);
-			arg2.drawString(Integer.toString(unitCount), x, y+unitImage.getHeight()+3);
+			
+			String sendName = "pending-send-to-"+mMap.getSelected().getPlace().getName()+"-for-" + unitName;
+			
+			arg2.drawString(Integer.toString(unitPresentCount) + "/" + Integer.toString(mCore.getValue(sendName)), x+unitImage.getWidth() + plus.getWidth(), y+3);
+			arg2.drawString(Integer.toString(unitCount), x+unitImage.getWidth() + plus.getWidth(), y+45);
 			arg2.drawString(unitName, x, y+unitImage.getHeight()+40);
+			
 			callUnit.render(arg0, arg2);
 			sendUnit.render(arg0, arg2);
 		}

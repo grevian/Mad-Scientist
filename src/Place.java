@@ -9,7 +9,7 @@ import org.newdawn.slick.state.StateBasedGame;
 public abstract class Place {
 	private String name;
 	private GameCore mCore;
-	private ArrayList<Minion> mUsers;
+	private ArrayList<Minion> mUsers = new ArrayList<Minion>();
 	
 	protected Place(String name, GameCore mCore)
 	{
@@ -47,10 +47,16 @@ public abstract class Place {
 
 	public void addUser(Minion mUnit) {
 		mUsers.add(mUnit);
+		mCore.removeMinion(mUnit);
 	}
 
 	public abstract Image getImage();
 
 	public abstract Coord getPosition();
 	
+	public abstract void initGraphics() throws SlickException;
+
+	public boolean removeUser(Minion m) {
+		return mUsers.remove(m);		
+	}
 }

@@ -293,29 +293,29 @@ public class PathMask implements TileBasedMap {
 	}
 	
 	public Coord RandomLocation(Coord src, int range) {
-		for ( int i = 0; i < 100; i++ )
+		for ( int i = 0; i < 1000; i++ )
 			{
 				// Wiggle around the src within +/- of the range
 				int p = src.getX() + ( mRand.nextBoolean() ? mRand.nextInt(range) : mRand.nextInt(range) * (-1) );
 				int q = src.getY() + ( mRand.nextBoolean() ? mRand.nextInt(range) : mRand.nextInt(range) * (-1) );
 				// Do some sanity checking to make sure we're still within bounds
 				p = Math.max(0, p);
-				p = Math.min(mTiles.length, p);	
+				p = Math.min(mTiles.length-1, p);	
 				q = Math.max(0, q);
-				q = Math.min(mTiles[p].length, q);
+				q = Math.min(mTiles[p].length-1, q);
 				
 				if ( mTiles[p][q].getType() == Tile.NORMAL )
 					return new Coord(p, q);
 			}
-		Log.warn("Could not find passable random location to walk to after 100 tries O_O");
-		return null;
+		Log.warn("Could not find passable random location to walk to after 1000 tries O_O");
+		return src;
 	}
 
 
 	public  UseableObject findObjectType(String type) {
 		for ( UseableObject uo: mCore.getObjects() )
 		{
-			if ( uo.getTypeName() == type && uo.getCurrentUsers() < uo.getMaxUsers() )
+			if ( uo.getTypeName().equalsIgnoreCase(type) )
 				return uo;
 		}
 		Log.warn("Minion attempted to find object of type " + type + ", but none were available!");

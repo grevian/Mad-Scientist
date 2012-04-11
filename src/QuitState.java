@@ -1,6 +1,7 @@
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -8,8 +9,9 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class QuitState extends BasicGameState {
 
-	private int exitDelay = 4000;
 	public static int ID = 4;
+	
+	GameContainer mCont;
 	
 	private String[] credits = { "Thanks for playing!", "", "Team:", "   Josh Hayes-Sheen", "   Kenneth Briggs", "   Leon Fiddler" };
 
@@ -21,6 +23,7 @@ public class QuitState extends BasicGameState {
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
+		mCont = arg0;
 	}
 
 	@Override
@@ -46,17 +49,15 @@ public class QuitState extends BasicGameState {
 	@Override
 	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
 			throws SlickException {
-		
-		// Reduce remaining time by the update delta
-		exitDelay -= arg2;
-		
-		// if we've displayed our full time period, exit.
-		if ( exitDelay <= 0 )
-		{
-			arg0.exit();
-		}
-		
-
 	}
 
+	public void keyPressed(int key, char arg1) {
+		mCont.exit();
+	}
+	
+	public void mouseClicked(int button,
+            int x, int y, int clickCount)
+	{
+		mCont.exit();
+	}
 }

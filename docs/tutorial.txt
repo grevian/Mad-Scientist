@@ -1,0 +1,19 @@
+TUTORIAL:
+The little green guys running around aimlessly are your servants.  They work
+for little more than a meal and a bed, but they're not the brightest.  You
+should give them a job to do.  Click the Map button, click the town, and click
+"+" next to the hunchback icon twice to send two hunchbacks into town to rob and
+extort the locals.
+
+Now, click the graveyard, and send a hunchback there to rob graves and collect
+body parts.  Hit Esc to return to the main game screen.
+
+[display when body parts == 6 && gold ==500]
+Now, you have enough gold and body parts to build your first monster.
+Click the Acme icon to enter the Store screen, and click to build a
+Monster.  You will need at least one available hunchback to help build
+it.
+
+You can also hire more minions, buy upgrades and stuff from this screen.
+You will need to perform research and upgrade your lab equipment to 
+build your Masterpiece.
