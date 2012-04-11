@@ -1,6 +1,6 @@
 # Mad Scientist
 This was a group project for COSC2036 - Games Design at Algoma University,
-Myself and two team members wrote a game design document then an implementation
+by Myself, Leon Fiddler and Ken Briggs. We wrote a game design document then an implementation
 of our proposed game over the course of one semester. This game takes heavy
 inspiration from "Evil Genius". In it, you take the role of a Mad Scientist who issues orders to minions to rob the local towns, and pillage the local graveyard, in order to buy equipment and find "parts" to build an ultimate creation, that will then be released upon the world.
 
