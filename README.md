@@ -4,6 +4,8 @@ Myself and two team members wrote a game design document then an implementation
 of our proposed game over the course of one semester. This game takes heavy
 inspiration from "Evil Genius". In it, you take the role of a Mad Scientist who issues orders to minions to rob the local towns, and pillage the local graveyard, in order to buy equipment and find "parts" to build an ultimate creation, that will then be released upon the world.
 
+To get a compiled version, or to see the screenshot gallery, Check out [The Wiki](https://github.com/grevian/Mad-Scientist/wiki)
+
 # TODO
 
 Some of the content of this game is under a questionable license, it should all
