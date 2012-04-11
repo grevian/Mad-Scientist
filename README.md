@@ -9,10 +9,10 @@ To get a compiled version, or to see the screenshot gallery, Check out [The Wiki
 # TODO
 
 Some of the content of this game is under a questionable license, it should all
-be attributed but there's definitely some chrono trigger and megaman sprites in
-there. I *think* they may be useable under Canadian Fair-Use laws, but please
-don't re-use them from here, and if some lawyer wants them gone please just
-email me.
+be attributed but there's definitely some video game sprites in there. 
+I *think* they are useable under Canadian Fair-Dealing laws since this 
+was a research/private study project, but please don't re-use them from here, 
+and if some lawyer wants them gone, please just email me.
 
 This project is abandonware, It was a fun group project, I learned some Java
 and the Slick Game Engine, but it has lots of bugs and is very simplistic. I'm
