@@ -1,3 +1,4 @@
 *.class
 *.swp
 .sconsign.dblite
+SlickTest.jar
