@@ -18,3 +18,7 @@ This project is abandonware, It was a fun group project, I learned some Java
 and the Slick Game Engine, but it has lots of bugs and is very simplistic. I'm
 putting it up here so I can refer to it and share it with my friends.
 
+# BUILD AND RUN
+
+> 1. scons
+> 2. ./run.sh or run.bat
