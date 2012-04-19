@@ -27,4 +27,12 @@ public class PortalToTown extends UseableObject {
 		return "Portal To Town";
 	}
 
+	@Override
+	public void upgrade() {
+	}
+
+	@Override
+	public boolean doEffect(Minion m, String string) {
+        return doEffect(m);
+	}
 }
