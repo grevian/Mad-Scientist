@@ -57,7 +57,7 @@ public class MenuState extends BasicGameState {
 			throws SlickException {
 		
 		Laugh = new Sound("./res/Sounds/Evil-Laugh.wav");
-		ps = new ParticleSystem(new Image("./res/Dot.png"), 500);
+		ps = new ParticleSystem(new Image("./res/dot.png"), 500);
 		
 		try {
 			File xmlFile = new File("./res/smoke.xml");
