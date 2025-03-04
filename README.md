@@ -4,6 +4,10 @@ by Myself, Leon Fiddler and Ken Briggs. We wrote a game design document then an 
 of our proposed game over the course of one semester. This game takes heavy
 inspiration from "Evil Genius". In it, you take the role of a Mad Scientist who issues orders to minions to rob the local towns, and pillage the local graveyard, in order to buy equipment and find "parts" to build an ultimate creation, that will then be released upon the world.
 
+![image](https://github.com/user-attachments/assets/633a75ef-c1b9-43e0-b362-a49605a11375)
+
+![image](https://github.com/user-attachments/assets/69383b98-8bd2-41bf-8142-9387e0740b74)
+
 To get a compiled version, or to see the screenshot gallery, Check out [The Wiki](https://github.com/grevian/Mad-Scientist/wiki)
 
 # TODO
